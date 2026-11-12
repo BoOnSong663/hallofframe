@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NK Hall of Fame</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#e0222f;--ink:#0d1322;--mut:#667089;--line:#e3e6ee}
+*{box-sizing:border-box}html{background:#050b1c}
+body{margin:0;font-family:Prompt,system-ui,sans-serif;color:#fff;line-height:1.5}
+body::before{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradient(70% 55% at 8% 0%,rgba(0,214,170,.28),transparent 62%),radial-gradient(60% 60% at 100% 8%,rgba(64,96,255,.36),transparent 62%),radial-gradient(55% 45% at 50% 105%,rgba(224,34,47,.26),transparent 65%),linear-gradient(160deg,#0a1f3d,#050b1c)}
+.top{position:sticky;top:0;z-index:5;background:rgba(7,13,32,.8);backdrop-filter:blur(12px);border-bottom:3px solid var(--red);padding:0 18px;min-height:56px;display:flex;align-items:center;gap:12px}
+.top b{font-size:17px}.top small{color:#9aa6c8}.top button{margin-left:auto}
+main{max-width:1040px;margin:0 auto;padding:22px 18px 80px}
+h1{margin:0;font-size:26px}.mut{color:#a9b8e2;font-size:13px}
+button{font:inherit;font-size:14px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:8px 14px}
+button.p{background:var(--red);border-color:var(--red);color:#fff}button.x{color:#b4232d}
+button.g{background:transparent;color:#cdd5ee;border-color:#3a4772}
+input,select{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+label{font-size:13px;color:var(--mut);display:block;margin:10px 0 4px}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0 22px}.bar input{max-width:260px;margin-left:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:30px 16px}
+.empty{grid-column:1/-1;text-align:center;color:#a9b8e2;padding:30px}
+dialog{border:0;border-radius:18px;padding:22px;width:min(420px,92vw);color:var(--ink);max-height:92vh}
+dialog::backdrop{background:rgba(10,16,35,.6)}
+.res{display:grid;gap:4px;margin-top:6px}.res button{text-align:left;padding:6px 10px;font-size:13px}.res button.on{border-color:var(--red);background:#fdf1f2}
+.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+/* ===== การ์ด ===== */
+.fc{cursor:default}.adm .fc{cursor:pointer}
+.fut{container-type:inline-size;position:relative;width:100%;max-width:240px;aspect-ratio:.7;margin:0 auto;filter:drop-shadow(0 10px 16px rgba(0,0,0,.5));transition:transform .18s}
+.fc:hover .fut{transform:translateY(-6px) scale(1.03)}
+.fo,.fm,.fi{position:absolute;clip-path:polygon(50% 0,72% 1.26%,92% 2.24%,100% 7.7%,100% 77%,86% 90.3%,50% 100%,14% 90.3%,0 77%,0 7.7%,8% 2.24%,28% 1.26%)}
+.fo{inset:0;background:linear-gradient(135deg,var(--bd1),var(--bd2) 22%,var(--bd1) 45%,var(--bd2) 72%,var(--bd1))}
+.fm{inset:1.5cqw;background:var(--bd2)}
+.fi{inset:2.7cqw;color:var(--fg);background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 26%,transparent 72%,rgba(0,0,0,.2)),radial-gradient(120% 70% at 72% 12%,var(--c2),transparent 62%),linear-gradient(172deg,var(--c2),var(--c1))}
+.fi::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%);background-size:260% 100%;animation:shn 5s linear infinite;pointer-events:none}
+@keyframes shn{0%{background-position:150% 0}100%{background-position:-60% 0}}
+@media(prefers-reduced-motion:reduce){.fi::after{animation:none}.fut{transition:none}}
+.ov{position:absolute;left:7cqw;top:9cqw;display:flex;flex-direction:column;align-items:center;line-height:1;gap:.8cqw}
+.ov b{font-size:11.5cqw}.ov span{font-size:5.6cqw;font-weight:600}
+.sp{position:absolute;left:0;right:0;top:6.6cqw;text-align:center;font-size:4.4cqw;font-weight:700;letter-spacing:.4cqw}
+.ph{position:absolute;left:0;right:0;margin:0 auto;top:7cqw;width:70cqw;height:74cqw;display:grid;place-items:center}
+.ph img{width:100%;height:100%;object-fit:contain;object-position:bottom;-webkit-mask-image:linear-gradient(#000 76%,transparent);mask-image:linear-gradient(#000 76%,transparent)}
+.nm{position:absolute;left:10cqw;right:10cqw;top:83cqw;text-align:center;font-size:8.5cqw;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st{position:absolute;left:7cqw;right:7cqw;top:95cqw;display:grid;grid-template-columns:repeat(6,1fr)}
+.st p{margin:0;display:flex;flex-direction:column;align-items:center;line-height:1.15}
+.st span{font-size:4.2cqw;font-weight:600;opacity:.85}.st b{font-size:8cqw}
+.ln{position:absolute;left:12cqw;right:12cqw;top:111cqw;height:.6cqw;background:var(--fg);opacity:.45}
+.ft{position:absolute;left:0;right:0;top:116cqw;text-align:center;font-size:4.4cqw;font-weight:500;opacity:.85}
+.t-bronze{--c1:#7a4a25;--c2:#cf9560;--bd1:#f3c999;--bd2:#8a5a30;--fg:#2c1708}
+.t-silver{--c1:#97a1b0;--c2:#e6ebf2;--bd1:#fff;--bd2:#8b95a4;--fg:#1a2430}
+.t-gold{--c1:#c79a2e;--c2:#f8e48f;--bd1:#fff3b8;--bd2:#a67c1a;--fg:#3a2a05}
+.t-rare{--c1:#a9680f;--c2:#ffd75e;--bd1:#fff0a8;--bd2:#8f5a0a;--fg:#2e1d03}
+.t-elite{--c1:#0a1747;--c2:#3a5ce0;--bd1:#f7e9ad;--bd2:#b8913a;--fg:#f6e9b4}
+.t-none{--c1:#2b3446;--c2:#5b667c;--bd1:#9aa5ba;--bd2:#4a5468;--fg:#e8ecf5}
+.t-potw{--c1:#04111d;--c2:#0fb0d4;--bd1:#9af0ff;--bd2:#0b6f8c;--fg:#e4fbff}
+.t-potm{--c1:#1c0734;--c2:#9333ea;--bd1:#f0c4ff;--bd2:#6d28d9;--fg:#fbe9ff}
+.t-poty{--c1:#050a26;--c2:#1f3f9a;--bd1:#ffe9a0;--bd2:#b18a2e;--fg:#ffe08a}
+.t-tots{--c1:#032419;--c2:#12a56a;--bd1:#ffeaa0;--bd2:#b18a2e;--fg:#fff1b8}
+.t-legend{--c1:#cdbd93;--c2:#fffaf0;--bd1:#fff4c4;--bd2:#b98f1c;--fg:#3a2c0a}
+.t-captain{--c1:#2e060b;--c2:#e0222f;--bd1:#ffd0d4;--bd2:#8f1019;--fg:#fff}
+.t-rising{--c1:#6d1a52;--c2:#ff8a3d;--bd1:#ffd9a6;--bd2:#c2410c;--fg:#fff4df}
+.t-mvp{--c1:#080808;--c2:#3a3a3a;--bd1:#f6dc8c;--bd2:#8a6a1a;--fg:#f3d27a}
+</style></head>
+<body>
+<div class="top"><b>NK HALL OF FAME</b><small>Fantasy Premier League</small><button class="g" id="lg" onclick="login()">แอดมิน</button></div>
+<main><div class="bar"><div><h1>หอเกียรติยศ</h1><span class="mut" id="cnt"></span></div>
+<input id="q" placeholder="ค้นหาชื่อ" oninput="draw()"><button class="p" id="add" hidden onclick="openDlg()">+ เพิ่มการ์ด</button></div>
+<div class="grid" id="list"><div class="empty">กำลังโหลด...</div></div>
+<p class="mut" style="margin-top:36px">คะแนนบนการ์ดคือเปอร์เซ็นไทล์ (0-99) เทียบกับนักเตะตำแหน่งเดียวกันในเกม Fantasy Premier League ฤดูกาลปัจจุบัน · PTS แต้มรวม · GLS ประตู · AST แอสซิสต์ · CS คลีนชีต · BNS โบนัส · ICT ดัชนี ICT · GK: SAV เซฟ, FRM ฟอร์ม</p></main>
+
+<dialog id="dlg"><h2 id="dt" style="margin:0">เพิ่มการ์ด</h2>
+<label>ค้นหานักเตะ FPL</label><input id="fq" autocomplete="off" placeholder="เช่น Salah, Haaland" oninput="search()">
+<div class="res" id="res"></div>
+<label>ชื่อบนการ์ด (ว่าง = ใช้ชื่อใน FPL)</label><input id="f_nick" maxlength="16">
+<label>ประเภทการ์ด</label><select id="f_sp"></select>
+<label>ข้อความใต้การ์ด (ไม่บังคับ)</label><input id="f_note" maxlength="24" placeholder="เช่น Golden Boot 2025/26">
+<div class="acts"><button class="x" id="del" onclick="del()">ลบ</button><button onclick="dlg.close()">ยกเลิก</button><button class="p" onclick="save()">บันทึก</button></div></dialog>
+
+<script>
+const $=id=>document.getElementById(id), dlg=$('dlg');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const SP={potw:['POTW','Player of the Week'],potm:['POTM','Player of the Month'],poty:['POTY','Player of the Year'],tots:['TOTS','Team of the Season'],legend:['LEGEND','Legend'],captain:['CAPTAIN','Captain'],rising:['RISING STAR','Rising Star'],mvp:['MVP','Most Valuable Player']};
+const POS={1:'GK',2:'DEF',3:'MID',4:'FWD'};
+const KEYS={1:[['PTS','pts'],['SAV','sav'],['CS','cs'],['FRM','frm'],['BNS','bns'],['ICT','ict']],0:[['PTS','pts'],['GLS','gls'],['AST','ast'],['CS','cs'],['BNS','bns'],['ICT','ict']]};
+let PW=sessionStorage.getItem('pw')||'', F=null, CARDS=[], editId=null, pickId=null;
+async function api(action,extra){const r=await fetch('/api/gas',{method:'POST',body:JSON.stringify({pw:PW,action,...extra})});const j=await r.json();if(j.error)throw new Error(j.error);return j}
+
+// ---- คำนวณคะแนนจาก FPL: เปอร์เซ็นไทล์ในตำแหน่งเดียวกัน (เฉพาะคนที่เคยลงเล่น) ----
+const memo={};
+function pct(pos,key,v){
+  const k=pos+key;
+  if(!memo[k])memo[k]=F.list.filter(e=>e.pos===pos&&e.min>0).map(e=>e[key]).sort((a,b)=>a-b);
+  const a=memo[k]; if(a.length<2)return 0;
+  let lo=0,eq=0; for(const x of a){if(x<v)lo++;else if(x===v)eq++;}
+  return Math.round(99*(lo+Math.max(eq-1,0)/2)/(a.length-1));
+}
+function rate(e){
+  if(!e||e.min<=0)return null;
+  const st=KEYS[e.pos===1?1:0].map(([l,k])=>[l,pct(e.pos,k,e[k])]);
+  return {st,ovr:st[0][1]};
+}
+const tier=o=>o==null?'none':o>=90?'elite':o>=80?'rare':o>=65?'gold':o>=45?'silver':'bronze';
+
+function card(c){
+  const e=F.els.get(c.fplId); if(!e)return '';
+  const r=rate(e), sp=SP[c.special]?c.special:'', t=sp||tier(r&&r.ovr);
+  const st=r?r.st:KEYS[e.pos===1?1:0].map(([l])=>[l,'--']);
+  return `<div class="fut t-${t}"><div class="fo"></div><div class="fm"></div><div class="fi">
+  ${sp?`<div class="sp">${SP[sp][0]}</div>`:''}
+  <div class="ph"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p${e.code}.png" alt="" loading="lazy" onerror="this.remove()"></div>
+  <div class="ov"><b>${r?r.ovr:'--'}</b><span>${POS[e.pos]}</span></div>
+  <div class="nm">${esc(c.nick||e.n)}</div>
+  <div class="st">${st.map(([l,v])=>`<p><span>${l}</span><b>${v}</b></p>`).join('')}</div><div class="ln"></div>
+  <div class="ft">${esc(c.spNote||(F.teams.get(e.t)||'')+' · £'+(e.cost/10).toFixed(1)+'m')}</div></div></div>`;
+}
+function draw(){
+  const q=norm($('q').value.trim());
+  const cs=CARDS.filter(c=>F.els.get(c.fplId)&&norm((c.nick||'')+' '+F.els.get(c.fplId).f+' '+F.els.get(c.fplId).l+' '+F.els.get(c.fplId).n).includes(q))
+    .sort((a,b)=>(!!SP[b.special]-!!SP[a.special])||((rate(F.els.get(b.fplId))||{ovr:-1}).ovr-(rate(F.els.get(a.fplId))||{ovr:-1}).ovr));
+  $('cnt').textContent=CARDS.length+' การ์ด';
+  $('list').innerHTML=cs.length?cs.map(c=>`<div class="fc" onclick="openDlg('${c.id}')">${card(c)}</div>`).join(''):`<div class="empty">${CARDS.length?'ไม่พบชื่อที่ค้นหา':'ยังไม่มีการ์ด'}</div>`;
+}
+async function init(){
+  try{
+    const [f,c]=await Promise.all([fetch('/api/fpl').then(r=>r.json()),api('list')]);
+    if(f.error)throw new Error(f.error);
+    F={list:f.els,els:new Map(f.els.map(e=>[e.id,e])),teams:new Map(f.teams.map(t=>[t.id,t.s]))};
+    CARDS=c.rows; draw();
+    if(PW)try{await api('ping');setAdmin(true)}catch(e){PW='';sessionStorage.removeItem('pw')}
+  }catch(e){$('list').innerHTML=`<div class="empty">โหลดไม่สำเร็จ: ${esc(e.message)}</div>`}
+}
+// ---- แอดมิน ----
+function setAdmin(on){document.body.classList.toggle('adm',on);$('add').hidden=!on;$('lg').textContent=on?'ออกจากระบบ':'แอดมิน'}
+async function login(){
+  if(document.body.classList.contains('adm')){PW='';sessionStorage.removeItem('pw');return setAdmin(false)}
+  const p=prompt('รหัสผ่านแอดมิน'); if(!p)return; PW=p;
+  try{await api('ping');sessionStorage.setItem('pw',p);setAdmin(true)}catch(e){PW='';alert(e.message)}
+}
+function search(){
+  const q=norm($('fq').value.trim()); if(q.length<2){$('res').innerHTML='';return}
+  const r=F.list.filter(e=>norm(e.f+' '+e.l+' '+e.n).includes(q)).sort((a,b)=>b.pts-a.pts).slice(0,8);
+  $('res').innerHTML=r.map(e=>`<button class="${e.id===pickId?'on':''}" onclick="pickEl(${e.id})">${esc(e.f+' '+e.l)} · ${F.teams.get(e.t)} · ${POS[e.pos]} · ${e.pts} pts</button>`).join('')||'<span class="mut">ไม่พบ</span>';
+}
+function pickEl(id){pickId=id;search()}
+function openDlg(id){
+  if(!document.body.classList.contains('adm'))return;
+  editId=id||null; const c=id?CARDS.find(x=>x.id===id):{};
+  pickId=c.fplId||null; $('dt').textContent=id?'แก้ไขการ์ด':'เพิ่มการ์ด';
+  $('fq').value=''; $('res').innerHTML=pickId?`<button class="on">${esc(F.els.get(pickId).f+' '+F.els.get(pickId).l)} (เลือกอยู่)</button>`:'';
+  $('f_sp').innerHTML='<option value="">อัตโนมัติ (ตามคะแนน FPL)</option>'+Object.entries(SP).map(([k,v])=>`<option value="${k}">${v[0]} · ${v[1]}</option>`).join('');
+  $('f_sp').value=c.special||''; $('f_nick').value=c.nick||''; $('f_note').value=c.spNote||''; $('del').hidden=!id;
+  dlg.showModal();
+}
+async function save(){
+  if(!pickId)return alert('กรุณาเลือกนักเตะ FPL');
+  const data={fplId:pickId,name:F.els.get(pickId).n,nick:$('f_nick').value.trim(),special:$('f_sp').value,spNote:$('f_note').value.trim()};
+  if(editId)data.id=editId;
+  try{const r=await api('save',{data});data.id=r.id;const i=CARDS.findIndex(x=>x.id===r.id);if(i>=0)CARDS[i]=data;else CARDS.push(data);dlg.close();draw()}
+  catch(e){alert('บันทึกไม่สำเร็จ: '+e.message)}
+}
+async function del(){
+  if(!confirm('ลบการ์ดนี้?'))return;
+  try{await api('delete',{id:editId});CARDS=CARDS.filter(x=>x.id!==editId);dlg.close();draw()}catch(e){alert('ลบไม่สำเร็จ: '+e.message)}
+}
+init();
+</script></body></html>
