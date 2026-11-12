@@ -21,7 +21,7 @@ label{font-size:13px;color:var(--mut);display:block;margin:10px 0 4px}
 .empty{grid-column:1/-1;text-align:center;color:#a9b8e2;padding:30px}
 dialog{border:0;border-radius:18px;padding:22px;width:min(420px,92vw);color:var(--ink);max-height:92vh}
 dialog::backdrop{background:rgba(10,16,35,.6)}
-.res{display:grid;gap:4px;margin-top:6px}.res button{text-align:left;padding:6px 10px;font-size:13px}.res button.on{border-color:var(--red);background:#fdf1f2}
+.g2{display:grid;grid-template-columns:repeat(3,1fr);gap:0 10px}.pv{display:flex;gap:14px;align-items:center;margin-top:8px}.pv .im{width:84px;height:84px;border-radius:16px;background:#e9ecf5;overflow:hidden;display:grid;place-items:center;color:var(--mut)}.pv img{width:100%;height:100%;object-fit:cover}.res{display:grid;gap:4px;margin-top:6px}.res button{text-align:left;padding:6px 10px;font-size:13px}.res button.on{border-color:var(--red);background:#fdf1f2}
 .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
 /* ===== การ์ด ===== */
 .fc{cursor:default}.adm .fc{cursor:pointer}
@@ -38,7 +38,7 @@ dialog::backdrop{background:rgba(10,16,35,.6)}
 .ov b{font-size:11.5cqw}.ov span{font-size:5.6cqw;font-weight:600}
 .sp{position:absolute;left:0;right:0;top:6.6cqw;text-align:center;font-size:4.4cqw;font-weight:700;letter-spacing:.4cqw}
 .ph{position:absolute;left:0;right:0;margin:0 auto;top:7cqw;width:70cqw;height:74cqw;display:grid;place-items:center}
-.ph img{width:100%;height:100%;object-fit:contain;object-position:bottom;-webkit-mask-image:linear-gradient(#000 76%,transparent);mask-image:linear-gradient(#000 76%,transparent)}
+.ph img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:linear-gradient(#000 76%,transparent);mask-image:linear-gradient(#000 76%,transparent)}
 .nm{position:absolute;left:10cqw;right:10cqw;top:83cqw;text-align:center;font-size:8.5cqw;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .st{position:absolute;left:7cqw;right:7cqw;top:95cqw;display:grid;grid-template-columns:repeat(6,1fr)}
 .st p{margin:0;display:flex;flex-direction:column;align-items:center;line-height:1.15}
@@ -65,98 +65,129 @@ dialog::backdrop{background:rgba(10,16,35,.6)}
 <main><div class="bar"><div><h1>หอเกียรติยศ</h1><span class="mut" id="cnt"></span></div>
 <input id="q" placeholder="ค้นหาชื่อ" oninput="draw()"><button class="p" id="add" hidden onclick="openDlg()">+ เพิ่มการ์ด</button></div>
 <div class="grid" id="list"><div class="empty">กำลังโหลด...</div></div>
-<p class="mut" style="margin-top:36px">คะแนนบนการ์ดคือเปอร์เซ็นไทล์ (0-99) เทียบกับนักเตะตำแหน่งเดียวกันในเกม Fantasy Premier League ฤดูกาลปัจจุบัน · PTS แต้มรวม · GLS ประตู · AST แอสซิสต์ · CS คลีนชีต · BNS โบนัส · ICT ดัชนี ICT · GK: SAV เซฟ, FRM ฟอร์ม</p></main>
+<p class="mut" style="margin-top:36px">ค่าบนการ์ดเป็นเลข 0-99 แอดมินกรอกเอง หรือกดดึงคะแนนจากนักเตะ FPL มาเป็นค่าตั้งต้นได้ (เปอร์เซ็นไทล์เทียบนักเตะตำแหน่งเดียวกันในเกม Fantasy Premier League) · PTS แต้มรวม · GLS ประตู · AST แอสซิสต์ · CS คลีนชีต · BNS โบนัส · ICT ดัชนี ICT · GK: SAV เซฟ, FRM ฟอร์ม</p></main>
 
 <dialog id="dlg"><h2 id="dt" style="margin:0">เพิ่มการ์ด</h2>
-<label>ค้นหานักเตะ FPL</label><input id="fq" autocomplete="off" placeholder="เช่น Salah, Haaland" oninput="search()">
+<div class="pv"><div class="im" id="im">ไม่มีรูป</div><div><button type="button" onclick="$('file').click()">เลือกรูป</button> <button type="button" class="x" onclick="photo='';refresh()">ลบรูป</button><input id="file" type="file" accept="image/*" hidden onchange="pickPhoto(this)"></div></div>
+<label>ชื่อ</label><input id="f_name" oninput="refresh()">
+<label>ชื่อเล่น (แสดงบนการ์ด)</label><input id="f_nick" maxlength="16" oninput="refresh()">
+<div class="g2"><div><label>ตำแหน่ง</label><select id="f_pos" onchange="refresh()"></select></div></div>
+<label>ค่าสถิติบนการ์ด (0-99)</label><div class="g2" id="sts"></div>
+<label>ดึงคะแนนจากนักเตะ FPL เป็นค่าตั้งต้น (ไม่บังคับ)</label><input id="fq" autocomplete="off" placeholder="เช่น Salah, Haaland" oninput="search()">
 <div class="res" id="res"></div>
-<label>ชื่อบนการ์ด (ว่าง = ใช้ชื่อใน FPL)</label><input id="f_nick" maxlength="16">
-<label>ประเภทการ์ด</label><select id="f_sp"></select>
-<label>ข้อความใต้การ์ด (ไม่บังคับ)</label><input id="f_note" maxlength="24" placeholder="เช่น Golden Boot 2025/26">
-<div class="acts"><button class="x" id="del" onclick="del()">ลบ</button><button onclick="dlg.close()">ยกเลิก</button><button class="p" onclick="save()">บันทึก</button></div></dialog>
+<label>ประเภทการ์ด</label><select id="f_sp" onchange="refresh()"></select>
+<label>ข้อความใต้การ์ด (ไม่บังคับ)</label><input id="f_note" maxlength="24" placeholder="เช่น Golden Boot 2026" oninput="refresh()">
+<div id="pvc" style="max-width:190px;margin:16px auto 0"></div>
+<div class="acts"><button class="x" id="del" onclick="del()">ลบ</button><button onclick="dlg.close()">ยกเลิก</button><button class="p" id="sv" onclick="save()">บันทึก</button></div></dialog>
 
 <script>
 const $=id=>document.getElementById(id), dlg=$('dlg');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 const SP={potw:['POTW','Player of the Week'],potm:['POTM','Player of the Month'],poty:['POTY','Player of the Year'],tots:['TOTS','Team of the Season'],legend:['LEGEND','Legend'],captain:['CAPTAIN','Captain'],rising:['RISING STAR','Rising Star'],mvp:['MVP','Most Valuable Player']};
-const POS={1:'GK',2:'DEF',3:'MID',4:'FWD'};
-const KEYS={1:[['PTS','pts'],['SAV','sav'],['CS','cs'],['FRM','frm'],['BNS','bns'],['ICT','ict']],0:[['PTS','pts'],['GLS','gls'],['AST','ast'],['CS','cs'],['BNS','bns'],['ICT','ict']]};
-let PW=sessionStorage.getItem('pw')||'', F=null, CARDS=[], editId=null, pickId=null;
+const POSL=['ST','CF','LW','RW','CAM','CM','CDM','LB','RB','CB','GK'], FPOS={1:'GK',2:'CB',3:'CM',4:'ST'};
+const LAB=p=>p==='GK'?['PTS','SAV','CS','FRM','BNS','ICT']:['PTS','GLS','AST','CS','BNS','ICT'];
+const KEYS=p=>p==='GK'?['pts','sav','cs','frm','bns','ict']:['pts','gls','ast','cs','bns','ict'];
+let PW=sessionStorage.getItem('pw')||'', F=null, CARDS=[], editId=null, photo='';
 async function api(action,extra){const r=await fetch('/api/gas',{method:'POST',body:JSON.stringify({pw:PW,action,...extra})});const j=await r.json();if(j.error)throw new Error(j.error);return j}
 
-// ---- คำนวณคะแนนจาก FPL: เปอร์เซ็นไทล์ในตำแหน่งเดียวกัน (เฉพาะคนที่เคยลงเล่น) ----
-const memo={};
-function pct(pos,key,v){
-  const k=pos+key;
-  if(!memo[k])memo[k]=F.list.filter(e=>e.pos===pos&&e.min>0).map(e=>e[key]).sort((a,b)=>a-b);
-  const a=memo[k]; if(a.length<2)return 0;
-  let lo=0,eq=0; for(const x of a){if(x<v)lo++;else if(x===v)eq++;}
-  return Math.round(99*(lo+Math.max(eq-1,0)/2)/(a.length-1));
-}
-function rate(e){
-  if(!e||e.min<=0)return null;
-  const st=KEYS[e.pos===1?1:0].map(([l,k])=>[l,pct(e.pos,k,e[k])]);
-  return {st,ovr:st[0][1]};
-}
+const ovr=c=>{const v=(c.s||[]).map(Number).filter(x=>!isNaN(x));return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):null};
 const tier=o=>o==null?'none':o>=90?'elite':o>=80?'rare':o>=65?'gold':o>=45?'silver':'bronze';
-
 function card(c){
-  const e=F.els.get(c.fplId); if(!e)return '';
-  const r=rate(e), sp=SP[c.special]?c.special:'', t=sp||tier(r&&r.ovr);
-  const st=r?r.st:KEYS[e.pos===1?1:0].map(([l])=>[l,'--']);
+  const o=ovr(c), sp=SP[c.special]?c.special:'', t=sp||tier(o), lb=LAB(c.pos), s=c.s||[];
   return `<div class="fut t-${t}"><div class="fo"></div><div class="fm"></div><div class="fi">
   ${sp?`<div class="sp">${SP[sp][0]}</div>`:''}
-  <div class="ph"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p${e.code}.png" alt="" loading="lazy" onerror="this.remove()"></div>
-  <div class="ov"><b>${r?r.ovr:'--'}</b><span>${POS[e.pos]}</span></div>
-  <div class="nm">${esc(c.nick||e.n)}</div>
-  <div class="st">${st.map(([l,v])=>`<p><span>${l}</span><b>${v}</b></p>`).join('')}</div><div class="ln"></div>
-  <div class="ft">${esc(c.spNote||(F.teams.get(e.t)||'')+' · £'+(e.cost/10).toFixed(1)+'m')}</div></div></div>`;
+  <div class="ph">${c.photo?`<img src="${esc(c.photo)}" alt="">`:`<span style="font-size:32cqw;font-weight:700;opacity:.3">${esc(String(c.name||'?').trim().charAt(0))}</span>`}</div>
+  <div class="ov"><b>${o==null?'--':o}</b><span>${esc(c.pos||'—')}</span></div>
+  <div class="nm">${esc(c.nick||c.name||'ชื่อ')}</div>
+  <div class="st">${lb.map((l,i)=>`<p><span>${l}</span><b>${s[i]===''||s[i]==null?'--':s[i]}</b></p>`).join('')}</div><div class="ln"></div>
+  <div class="ft">${esc(c.spNote||'')}</div></div></div>`;
 }
 function draw(){
   const q=norm($('q').value.trim());
-  const cs=CARDS.filter(c=>F.els.get(c.fplId)&&norm((c.nick||'')+' '+F.els.get(c.fplId).f+' '+F.els.get(c.fplId).l+' '+F.els.get(c.fplId).n).includes(q))
-    .sort((a,b)=>(!!SP[b.special]-!!SP[a.special])||((rate(F.els.get(b.fplId))||{ovr:-1}).ovr-(rate(F.els.get(a.fplId))||{ovr:-1}).ovr));
+  const cs=CARDS.filter(c=>norm((c.name||'')+' '+(c.nick||'')).includes(q)).sort((a,b)=>(!!SP[b.special]-!!SP[a.special])||((ovr(b)??-1)-(ovr(a)??-1)));
   $('cnt').textContent=CARDS.length+' การ์ด';
   $('list').innerHTML=cs.length?cs.map(c=>`<div class="fc" onclick="openDlg('${c.id}')">${card(c)}</div>`).join(''):`<div class="empty">${CARDS.length?'ไม่พบชื่อที่ค้นหา':'ยังไม่มีการ์ด'}</div>`;
 }
 async function init(){
   try{
-    const [f,c]=await Promise.all([fetch('/api/fpl').then(r=>r.json()),api('list')]);
-    if(f.error)throw new Error(f.error);
-    F={list:f.els,els:new Map(f.els.map(e=>[e.id,e])),teams:new Map(f.teams.map(t=>[t.id,t.s]))};
-    CARDS=c.rows; draw();
+    CARDS=(await api('list')).rows; draw();
     if(PW)try{await api('ping');setAdmin(true)}catch(e){PW='';sessionStorage.removeItem('pw')}
   }catch(e){$('list').innerHTML=`<div class="empty">โหลดไม่สำเร็จ: ${esc(e.message)}</div>`}
 }
-// ---- แอดมิน ----
 function setAdmin(on){document.body.classList.toggle('adm',on);$('add').hidden=!on;$('lg').textContent=on?'ออกจากระบบ':'แอดมิน'}
 async function login(){
   if(document.body.classList.contains('adm')){PW='';sessionStorage.removeItem('pw');return setAdmin(false)}
   const p=prompt('รหัสผ่านแอดมิน'); if(!p)return; PW=p;
   try{await api('ping');sessionStorage.setItem('pw',p);setAdmin(true)}catch(e){PW='';alert(e.message)}
 }
-function search(){
-  const q=norm($('fq').value.trim()); if(q.length<2){$('res').innerHTML='';return}
-  const r=F.list.filter(e=>norm(e.f+' '+e.l+' '+e.n).includes(q)).sort((a,b)=>b.pts-a.pts).slice(0,8);
-  $('res').innerHTML=r.map(e=>`<button class="${e.id===pickId?'on':''}" onclick="pickEl(${e.id})">${esc(e.f+' '+e.l)} · ${F.teams.get(e.t)} · ${POS[e.pos]} · ${e.pts} pts</button>`).join('')||'<span class="mut">ไม่พบ</span>';
+// ---- ฟอร์ม ----
+function curC(){
+  const s=[0,1,2,3,4,5].map(i=>{const v=$('s'+i)?$('s'+i).value:'';return v===''?'':Math.max(0,Math.min(99,Math.round(+v)))});
+  return {name:$('f_name').value.trim(),nick:$('f_nick').value.trim(),pos:$('f_pos').value,special:$('f_sp').value,spNote:$('f_note').value.trim(),photo,s};
 }
-function pickEl(id){pickId=id;search()}
+function buildStats(vals){
+  const lb=LAB($('f_pos').value);
+  $('sts').innerHTML=lb.map((l,i)=>`<div><label>${l}</label><input id="s${i}" type="number" min="0" max="99" inputmode="numeric" value="${vals&&vals[i]!==''&&vals[i]!=null?vals[i]:''}" oninput="refresh(1)"></div>`).join('');
+}
+let lastGK=null;
+function refresh(keep){
+  const gk=$('f_pos').value==='GK';
+  if(gk!==lastGK){const old=[0,1,2,3,4,5].map(i=>$('s'+i)?$('s'+i).value:'');lastGK=gk;buildStats(old)}
+  $('im').innerHTML=photo?`<img src="${esc(photo)}" alt="">`:'ไม่มีรูป';
+  $('pvc').innerHTML=card(curC());
+}
 function openDlg(id){
   if(!document.body.classList.contains('adm'))return;
   editId=id||null; const c=id?CARDS.find(x=>x.id===id):{};
-  pickId=c.fplId||null; $('dt').textContent=id?'แก้ไขการ์ด':'เพิ่มการ์ด';
-  $('fq').value=''; $('res').innerHTML=pickId?`<button class="on">${esc(F.els.get(pickId).f+' '+F.els.get(pickId).l)} (เลือกอยู่)</button>`:'';
-  $('f_sp').innerHTML='<option value="">อัตโนมัติ (ตามคะแนน FPL)</option>'+Object.entries(SP).map(([k,v])=>`<option value="${k}">${v[0]} · ${v[1]}</option>`).join('');
-  $('f_sp').value=c.special||''; $('f_nick').value=c.nick||''; $('f_note').value=c.spNote||''; $('del').hidden=!id;
-  dlg.showModal();
+  $('dt').textContent=id?'แก้ไขการ์ด':'เพิ่มการ์ด'; photo=c.photo||'';
+  $('f_name').value=c.name||''; $('f_nick').value=c.nick||''; $('f_note').value=c.spNote||'';
+  $('f_pos').innerHTML='<option value="">— ไม่ระบุ —</option>'+POSL.map(p=>`<option>${p}</option>`).join(''); $('f_pos').value=c.pos||'';
+  $('f_sp').innerHTML='<option value="">อัตโนมัติ (ตามค่าเฉลี่ย)</option>'+Object.entries(SP).map(([k,v])=>`<option value="${k}">${v[0]} · ${v[1]}</option>`).join(''); $('f_sp').value=c.special||'';
+  lastGK=$('f_pos').value==='GK'; buildStats(c.s); $('fq').value=''; $('res').innerHTML=''; $('del').hidden=!id;
+  refresh(); dlg.showModal();
+}
+function pickPhoto(inp){
+  const f=inp.files[0]; if(!f)return;
+  const img=new Image(), u=URL.createObjectURL(f);
+  img.onload=()=>{
+    const c=document.createElement('canvas'),x=c.getContext('2d'),m=Math.min(img.width,img.height);
+    let n=288,q=.85,d; const draw=()=>{c.width=c.height=n;x.clearRect(0,0,n,n);x.drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,n,n);d=c.toDataURL('image/webp',q)};
+    draw(); while(d.length>30000&&n>96){if(q>.4&&d.startsWith('data:image/webp'))q-=.1;else n-=32;draw()}
+    photo=d; refresh(); URL.revokeObjectURL(u);
+  };
+  img.onerror=()=>alert('เปิดไฟล์รูปนี้ไม่ได้ ลองรูปอื่น (JPG/PNG)');
+  img.src=u; inp.value='';
+}
+// ---- ดึงคะแนนจาก FPL (ใช้เป็นค่าตั้งต้น) ----
+const memo={};
+function pct(pos,key,v){
+  const k=pos+key;
+  if(!memo[k])memo[k]=F.filter(e=>e.pos===pos&&e.min>0).map(e=>e[key]).sort((a,b)=>a-b);
+  const a=memo[k]; if(a.length<2)return 0;
+  let lo=0,eq=0; for(const x of a){if(x<v)lo++;else if(x===v)eq++;}
+  return Math.round(99*(lo+Math.max(eq-1,0)/2)/(a.length-1));
+}
+async function search(){
+  const q=norm($('fq').value.trim()); if(q.length<2){$('res').innerHTML='';return}
+  if(!F){try{const j=await fetch('/api/fpl').then(r=>r.json());if(j.error)throw new Error(j.error);F=j.els}catch(e){$('res').innerHTML='<span class="mut">ดึงข้อมูล FPL ไม่ได้</span>';return}}
+  const r=F.filter(e=>norm(e.f+' '+e.l+' '+e.n).includes(q)&&e.min>0).sort((a,b)=>b.pts-a.pts).slice(0,6);
+  $('res').innerHTML=r.map(e=>`<button type="button" onclick="fillFpl(${e.id})">${esc(e.f+' '+e.l)} · ${FPOS[e.pos]} · ${e.pts} pts</button>`).join('')||'<span class="mut">ไม่พบ (หรือยังไม่เคยลงเล่น)</span>';
+}
+function fillFpl(id){
+  const e=F.find(x=>x.id===id); if(!e)return;
+  if(!$('f_pos').value)$('f_pos').value=FPOS[e.pos];
+  const gk=$('f_pos').value==='GK';
+  if((e.pos===1)!==gk&&!confirm('ตำแหน่งไม่ตรงกับนักเตะ FPL คนนี้ ใช้ค่าต่อไปไหม?'))return;
+  lastGK=gk; buildStats(KEYS($('f_pos').value).map(k=>pct(e.pos,k,e[k])));
+  $('res').innerHTML='<span class="mut">ใส่ค่าให้แล้ว แก้ตัวเลขเองได้</span>'; refresh();
 }
 async function save(){
-  if(!pickId)return alert('กรุณาเลือกนักเตะ FPL');
-  const data={fplId:pickId,name:F.els.get(pickId).n,nick:$('f_nick').value.trim(),special:$('f_sp').value,spNote:$('f_note').value.trim()};
-  if(editId)data.id=editId;
-  try{const r=await api('save',{data});data.id=r.id;const i=CARDS.findIndex(x=>x.id===r.id);if(i>=0)CARDS[i]=data;else CARDS.push(data);dlg.close();draw()}
+  const c=curC(); if(!c.name)return alert('กรุณากรอกชื่อ');
+  if(editId)c.id=editId; $('sv').disabled=true;
+  try{const r=await api('save',{data:c});c.id=r.id;const i=CARDS.findIndex(x=>x.id===r.id);if(i>=0)CARDS[i]=c;else CARDS.push(c);dlg.close();draw()}
   catch(e){alert('บันทึกไม่สำเร็จ: '+e.message)}
+  $('sv').disabled=false;
 }
 async function del(){
   if(!confirm('ลบการ์ดนี้?'))return;
