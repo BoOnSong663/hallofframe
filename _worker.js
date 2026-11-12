@@ -1,4 +1,4 @@
-// NK Hall of Fame - Cloudflare Worker
+// BBS888 Hall of Fame - Cloudflare Worker
 // /api/fpl = ดึงข้อมูล Fantasy Premier League (แคช 10 นาที)  /api/gas = proxy ไป Google Apps Script
 const CORS = { 'access-control-allow-origin': '*' };
 const json = (o, s = 200, extra = {}) => new Response(JSON.stringify(o), {
@@ -13,7 +13,7 @@ export default {
     if (url.pathname === '/api/fpl') {
       try {
         const r = await fetch('https://fantasy.premierleague.com/api/bootstrap-static/', {
-          headers: { 'user-agent': 'Mozilla/5.0 (compatible; NK-HOF)' }, cf: { cacheTtl: 600, cacheEverything: true } });
+          headers: { 'user-agent': 'Mozilla/5.0 (compatible; BBS888-HOF)' }, cf: { cacheTtl: 600, cacheEverything: true } });
         if (!r.ok) return json({ error: 'FPL HTTP ' + r.status }, 502);
         const d = await r.json();
         return json({
