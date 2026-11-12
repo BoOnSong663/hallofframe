@@ -1,10 +1,10 @@
-name = "nk-hof"
+name = "bbs888-hof"
 main = "_worker.js"
 compatibility_date = "2024-01-01"
 
 [assets]
-directory = "./public"
+directory = "./"
 binding = "ASSETS"
 
 [vars]
-GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhMw5JY29DirF-ZZLOixnwc6mLf87K2eBpH0C3TchZcadwa_cdgaeJ3qRxJiIS6PGa8g/exec"
+GOOGLE_SCRIPT_URL = "ใhttps://script.google.com/macros/s/AKfycbzhMw5JY29DirF-ZZLOixnwc6mLf87K2eBpH0C3TchZcadwa_cdgaeJ3qRxJiIS6PGa8g/exec"
